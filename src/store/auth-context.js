@@ -30,9 +30,9 @@ export const AuthContextProvider = (props) => {
     };
 
     return (
-        <AuthContextProvider value={contextValue}>
+        <AuthContext.Provider value={contextValue}>
             {props.children}
-        </AuthContextProvider>
+        </AuthContext.Provider>
     );
 }
 
