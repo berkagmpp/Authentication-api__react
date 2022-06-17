@@ -30,7 +30,7 @@ const AuthForm = () => {
         } else {
             url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB2zalKGx016HSuDDm0EnL9zonlpy3_uV0';
         }
-        
+
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -46,16 +46,20 @@ const AuthForm = () => {
             setIsLoading(false);
 
             if (res.ok) {
-                // ...
+                return res.json();
             } else {
                 return res.json().then((data) => {
                     let errorMessage = 'Authentication failed!';
-                    if (data && data.error && data.error.message) {
-                        errorMessage = data.error.message;
-                    }
-                    alert(errorMessage);
+                    // if (data && data.error && data.error.message) {
+                    //     errorMessage = data.error.message;
+                    // }
+                    throw new Error(errorMessage);
                 });
             }
+        }).then(data => {
+            console.log(data);
+        }).catch(err => {
+            alert(err);
         });
     };
 
