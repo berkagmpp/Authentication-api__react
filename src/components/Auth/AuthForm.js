@@ -4,6 +4,7 @@ import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
@@ -19,6 +20,8 @@ const AuthForm = () => {
         const enteredPassword = passwordInputRef.current.value;
 
         // options: validation
+
+        setIsLoading(true);
 
         if (isLogin) {
             // ...
@@ -36,6 +39,8 @@ const AuthForm = () => {
                     }
                 }
             ).then (res => {
+                setIsLoading(false);
+
                 if (res.ok) {
                     // ...
                 } else {
@@ -64,7 +69,8 @@ const AuthForm = () => {
                     <input type='password' id='password' ref={passwordInputRef} required />
                 </div>
                 <div className={classes.actions}>
-                    <button>{isLogin ? 'Login' : 'Create Account'}</button>
+                    {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+                    {isLoading && <p>Sending request...</p>}
                     <button
                         type='button'
                         className={classes.toggle}
