@@ -23,37 +23,40 @@ const AuthForm = () => {
 
         setIsLoading(true);
 
-        if (isLogin) {
-            // ...
-        } else {
-            fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB2zalKGx016HSuDDm0EnL9zonlpy3_uV0',
-                {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        email: enteredEmail,
-                        password: enteredPassword,
-                        returnSecureToken: true
-                    }),
-                    headers: {
-                        'Content-Type': 'application/jason'
-                    }
-                }
-            ).then (res => {
-                setIsLoading(false);
+        let url;
 
-                if (res.ok) {
-                    // ...
-                } else {
-                    return res.json().then((data) => {
-                        let errorMessage = 'Authentication failed!';
-                        if (data && data.error && data.error.message) {
-                            errorMessage = data.error.message;
-                        }
-                        alert(errorMessage);
-                    });
-                }
-            });
+        if (isLogin) {
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB2zalKGx016HSuDDm0EnL9zonlpy3_uV0';
+        } else {
+            url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB2zalKGx016HSuDDm0EnL9zonlpy3_uV0';
         }
+        
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                email: enteredEmail,
+                password: enteredPassword,
+                returnSecureToken: true
+            }),
+            headers: {
+                'Content-Type': 'application/jason'
+            }
+        }
+        ).then(res => {
+            setIsLoading(false);
+
+            if (res.ok) {
+                // ...
+            } else {
+                return res.json().then((data) => {
+                    let errorMessage = 'Authentication failed!';
+                    if (data && data.error && data.error.message) {
+                        errorMessage = data.error.message;
+                    }
+                    alert(errorMessage);
+                });
+            }
+        });
     };
 
     return (
