@@ -7,7 +7,7 @@ import classes from './ProfileForm.module.css';
 const ProfileForm = () => {
     const newPasswordInputRef = useRef();
 
-    const AuthCtx = useContext(AuthContext);
+    const authCtx = useContext(AuthContext);
 
     const submitHandler = event => {
         event.preventDefault();
@@ -19,13 +19,24 @@ const ProfileForm = () => {
         fetch('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyB2zalKGx016HSuDDm0EnL9zonlpy3_uV0', {
             method: 'POST',
             body: JSON.stringify({
-                idToken,
-                password,
-                returnSecureToken
+                idToken: authCtx.token,
+                password: enteredNewPassword,
+                returnSecureToken: false
             }),
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                return res.json().then((data) => {
+                    let errorMessage = 'Authentication failed!';
+                    throw new Error(errorMessage);
+                });
+            }
+        }).catch(err => {
+            alert(err);
         });
     };
 
@@ -33,7 +44,7 @@ const ProfileForm = () => {
         <form className={classes.form} onSubmit={submitHandler}>
             <div className={classes.control}>
                 <label htmlFor='new-password'>New Password</label>
-                <input type='password' id='new-password' ref={newPasswordInputRef} />
+                <input type='password' id='new-password' minLength='7' ref={newPasswordInputRef} />
             </div>
             <div className={classes.action}>
                 <button>Change Password</button>
