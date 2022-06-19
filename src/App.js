@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
@@ -27,6 +27,9 @@ function App() {
                         <UserProfile />
                     </Route>
                 )}
+                <Route path='*'>
+                    <Redirect to='/' />
+                </Route>
             </Switch>
         </Layout>
     );
