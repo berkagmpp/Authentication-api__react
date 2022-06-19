@@ -22,11 +22,10 @@ function App() {
                         <AuthPage />
                     </Route>
                 )}
-                {AuthCtx.isLoggedIn && (
-                    <Route path='/profile'>
-                        <UserProfile />
-                    </Route>
-                )}
+                <Route path='/profile'>
+                    {AuthCtx.isLoggedIn && <UserProfile />}
+                    {!AuthCtx.isLoggedIn && <Redirect to='/auth' />}
+                </Route>
                 <Route path='*'>
                     <Redirect to='/' />
                 </Route>
