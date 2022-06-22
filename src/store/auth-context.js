@@ -24,11 +24,18 @@ export const AuthContextProvider = (props) => {
     const userIsLoggedIn = !!token;     // simply converts this truthy or falsy value
     // if token is true and string, return true
 
+    const logoutHandler = () => {
+        setToken(null);
+        localStorage.removeItem('token');
+    };
+
     const loginHandler = (token, expirationTime) => {
         setToken(token);
         localStorage.setItem('token', token);
 
         const remainingTime = calculateRemainingTime(expirationTime);
+
+        setTimeout(logoutHandler, remainingTime);
     };
 
     const contextValue = {

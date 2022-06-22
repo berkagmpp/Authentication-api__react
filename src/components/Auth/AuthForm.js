@@ -65,7 +65,8 @@ const AuthForm = () => {
                 });
             }
         }).then(data => {
-            authCtx.login(data.idToken);
+            const expirationTime = new Date(new Date().getTime() + (+data.expiresIn * 1000));    // data.expiresIn to num(+) and miliseconds(*1000) for setTimeout logout in AuthContext
+            authCtx.login(data.idToken, expirationTime.toISOString());
             history.replace('/');
         }).catch(err => {
             alert(err);
