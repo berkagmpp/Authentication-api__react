@@ -8,6 +8,15 @@ const AuthContext = React.createContext({
 
 });
 
+const calculateRemainingTime = (expirationTime) => {
+    const currentTime = new Date().getTime();       // timestamp milliseconds
+    const adjExpirationTime = new Date(expirationTime).getTime();     // convert passed expirationTime to a date obj (timestamp milliseconds)
+
+    const remainingDuration = adjExpirationTime - currentTime;
+
+    return remainingDuration;
+};
+
 export const AuthContextProvider = (props) => {
     const initialToken = localStorage.getItem('token');
     const [token, setToken] = useState(initialToken);
@@ -15,14 +24,11 @@ export const AuthContextProvider = (props) => {
     const userIsLoggedIn = !!token;     // simply converts this truthy or falsy value
     // if token is true and string, return true
 
-    const loginHandler = (token) => {
+    const loginHandler = (token, expirationTime) => {
         setToken(token);
         localStorage.setItem('token', token);
-    };
 
-    const logoutHandler = () => {
-        setToken(null);
-        localStorage.removeItem('token');
+        const remainingTime = calculateRemainingTime(expirationTime);
     };
 
     const contextValue = {
